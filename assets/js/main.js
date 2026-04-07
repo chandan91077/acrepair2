@@ -123,51 +123,193 @@ const statsObserver = new IntersectionObserver(entries => {
 const heroStatsEl = document.querySelector('.hero-stats');
 if (heroStatsEl) statsObserver.observe(heroStatsEl);
 
-/* ── Contact form via Web3Forms (SMTP email) ── */
-const contactForm = document.getElementById('contactForm');
-if (contactForm) {
-  contactForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+/* ── Contact form via Vercel API (owner + customer response) ── */
+const isLocalHost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+const CONTACT_API_ENDPOINTS = isLocalHost
+  ? [
+      'http://localhost:3000/api/send-mail',
+      '/api/send-mail',
+      '/ac-repair-service/api/send-mail'
+    ]
+  : [
+      '/api/send-mail',
+      'api/send-mail',
+      './api/send-mail',
+      '/ac-repair-service/api/send-mail'
+    ];
 
-    const submitBtn = contactForm.querySelector('.form-submit');
-    const successMsg = document.getElementById('form-success');
-    const errorMsg   = document.getElementById('form-error');
+function getStatusNodes(form) {
+  const isPopup = form.id === 'popupServiceForm';
+  return {
+    successMsg: isPopup ? document.getElementById('popup-form-success') : document.getElementById('form-success'),
+    errorMsg: isPopup ? document.getElementById('popup-form-error') : document.getElementById('form-error')
+  };
+}
 
-    // Reset messages
-    successMsg.style.display = 'none';
-    errorMsg.style.display   = 'none';
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<span>⏳</span> Sending...';
+function resetStatus(form) {
+  const { successMsg, errorMsg } = getStatusNodes(form);
+  if (successMsg) successMsg.style.display = 'none';
+  if (errorMsg) {
+    errorMsg.style.display = 'none';
+    errorMsg.textContent = '';
+  }
+}
 
-    // Gather form data
-    const formData = new FormData(contactForm);
+function showSuccess(form, text) {
+  const { successMsg } = getStatusNodes(form);
+  if (successMsg) {
+    successMsg.textContent = text;
+    successMsg.style.display = 'block';
+  }
+}
+
+function showError(form, text) {
+  const { errorMsg } = getStatusNodes(form);
+  if (errorMsg) {
+    errorMsg.textContent = text;
+    errorMsg.style.display = 'block';
+  }
+}
+
+async function sendServiceEmails(data) {
+  let lastError = null;
+  const tried = new Set();
+
+  for (const endpoint of CONTACT_API_ENDPOINTS) {
+    const url = endpoint.trim();
+    if (tried.has(url)) {
+      continue;
+    }
+    tried.add(url);
 
     try {
-      const response = await fetch('https://api.web3forms.com/submit', {
+      const response = await fetch(url, {
         method: 'POST',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
       });
-      const result = await response.json();
 
-      if (result.success) {
-        successMsg.style.display = 'block';
-        contactForm.reset();
-        submitBtn.innerHTML = '✅ Message Sent!';
+      const result = await response.json().catch(() => ({}));
+      if (response.ok && result.success) {
+        return;
+      }
+
+      lastError = new Error(result.message || `API error ${response.status} at ${url}`);
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  if (isLocalHost) {
+    throw new Error(
+      'Local static server cannot run /api. Run with Vercel dev on localhost:3000 or test on deployed Vercel URL.'
+    );
+  }
+
+  throw lastError || new Error('Unable to reach mail API');
+}
+
+function attachServiceFormHandler(form) {
+  if (!form) return;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const submitBtn = form.querySelector('.form-submit');
+    const originalBtnHtml = submitBtn.innerHTML;
+    resetStatus(form);
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    const data = {
+      name: form.querySelector('[name="name"]').value.trim(),
+      phone: form.querySelector('[name="phone"]').value.trim(),
+      email: form.querySelector('[name="email"]').value.trim(),
+      service: form.querySelector('[name="service"]').value,
+      source: form.id === 'popupServiceForm' ? 'Popup Form' : 'Contact Section Form'
+    };
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span>Sending...</span>';
+
+    try {
+      await sendServiceEmails(data);
+      showSuccess(form, 'Request sent successfully. A confirmation has been emailed to you.');
+      form.reset();
+
+      if (form.id === 'popupServiceForm') {
         setTimeout(() => {
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = '📤 Send Message';
-        }, 4000);
-      } else {
-        throw new Error(result.message || 'Submission failed.');
+          closeLeadPopup();
+        }, 1200);
       }
     } catch (err) {
-      errorMsg.style.display = 'block';
-      errorMsg.textContent = '❌ Error: ' + err.message + '. Please try calling us directly.';
+      const reason = err && err.message ? ` (${err.message})` : '';
+      showError(form, `Unable to send request now${reason}. Please call 8200205795.`);
+    } finally {
       submitBtn.disabled = false;
-      submitBtn.innerHTML = '📤 Send Message';
+      submitBtn.innerHTML = originalBtnHtml;
     }
   });
 }
+
+attachServiceFormHandler(document.getElementById('contactForm'));
+attachServiceFormHandler(document.getElementById('popupServiceForm'));
+
+/* ── Scroll popup + bottom bar controls ── */
+const leadPopup = document.getElementById('leadPopup');
+const openPopupBtn = document.getElementById('openPopupForm');
+const closePopupBtn = document.getElementById('closePopupForm');
+const closeQuickBookBarBtn = document.getElementById('closeQuickBookBar');
+const quickBookBar = document.getElementById('quickBookBar');
+let hasShownLeadPopup = false;
+
+function openLeadPopup() {
+  if (!leadPopup) return;
+  leadPopup.classList.add('open');
+  leadPopup.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('popup-open');
+}
+
+function closeLeadPopup() {
+  if (!leadPopup) return;
+  leadPopup.classList.remove('open');
+  leadPopup.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('popup-open');
+}
+
+if (openPopupBtn) {
+  openPopupBtn.addEventListener('click', openLeadPopup);
+}
+
+if (closePopupBtn) {
+  closePopupBtn.addEventListener('click', closeLeadPopup);
+}
+
+if (leadPopup) {
+  leadPopup.addEventListener('click', (e) => {
+    if (e.target.matches('[data-close-popup="true"]')) {
+      closeLeadPopup();
+    }
+  });
+}
+
+if (closeQuickBookBarBtn && quickBookBar) {
+  closeQuickBookBarBtn.addEventListener('click', () => {
+    quickBookBar.style.display = 'none';
+  });
+}
+
+setTimeout(() => {
+  if (!hasShownLeadPopup) {
+    hasShownLeadPopup = true;
+    openLeadPopup();
+  }
+}, 5000);
 
 /* ── Smooth scrolling for anchor links ── */
 document.querySelectorAll('a[href^="#"]').forEach(a => {

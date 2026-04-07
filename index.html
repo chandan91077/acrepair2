@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0, user-scalable=yes" />
   <meta name="theme-color" content="#050e1a" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
   <!-- ════ SEO Meta Tags ════ -->
@@ -34,7 +35,7 @@
     "name": "AirCool AC Services",
     "description": "Fast, Reliable & Affordable AC Repair in Surat",
     "telephone": "+918200205795",
-    "email": "service@gmail.com",
+    "email": "krishnaacservice84@gmail.com",
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Surat",
@@ -611,23 +612,23 @@
           <div class="contact-details">
             <a class="contact-item" href="tel:8200205795" aria-label="Call AirCool">
               <div class="contact-item-icon"><i class="fas fa-phone"></i></div>
-              <div>
+              <div class="contact-item-content">
                 <div class="contact-item-label">Call / WhatsApp Us</div>
                 <div class="contact-item-value" style="color:var(--primary);">+91 82002 05795</div>
               </div>
             </a>
 
-            <a class="contact-item" href="mailto:service@gmail.com" aria-label="Email AirCool">
+            <a class="contact-item" href="mailto:krishnaacservice84@gmail.com" aria-label="Email AirCool">
               <div class="contact-item-icon"><i class="fas fa-envelope"></i></div>
-              <div>
+              <div class="contact-item-content">
                 <div class="contact-item-label">Email</div>
-                <div class="contact-item-value"><a href="mailto:service@gmail.com">service@gmail.com</a></div>
+                <div class="contact-item-value">krishnaacservice84@gmail.com</div>
               </div>
             </a>
 
             <div class="contact-item">
               <div class="contact-item-icon"><i class="fas fa-map-marker-alt"></i></div>
-              <div>
+              <div class="contact-item-content">
                 <div class="contact-item-label">Service Location</div>
                 <div class="contact-item-value">Surat, Gujarat, India – 395001</div>
               </div>
@@ -635,7 +636,7 @@
 
             <div class="contact-item">
               <div class="contact-item-icon"><i class="fas fa-clock"></i></div>
-              <div>
+              <div class="contact-item-content">
                 <div class="contact-item-label">Working Hours</div>
                 <div class="contact-item-value">24 Hours / 7 Days a Week</div>
               </div>
@@ -646,7 +647,7 @@
             <a href="https://wa.me/918200205795" class="social-link" target="_blank" aria-label="WhatsApp"><i
                 class="fab fa-whatsapp"></i></a>
             <a href="tel:8200205795" class="social-link" aria-label="Phone"><i class="fas fa-phone"></i></a>
-            <a href="mailto:service@gmail.com" class="social-link" aria-label="Email"><i
+            <a href="mailto:krishnaacservice84@gmail.com" class="social-link" aria-label="Email"><i
                 class="fas fa-envelope"></i></a>
           </div>
 
@@ -666,71 +667,47 @@
           <h3>📋 Book a Service</h3>
           <p>Fill in the form below and our team will contact you within 30 minutes during working hours.</p>
 
-          <!--
-          Web3Forms Integration
-          ➤ Get your FREE access key at https://web3forms.com/
-          ➤ Replace YOUR_WEB3FORMS_ACCESS_KEY below with your actual key.
-          ➤ All form submissions will be emailed to the address linked to that key.
-        -->
-          <form id="contactForm" method="POST" novalidate>
-            <!-- Web3Forms hidden inputs -->
-            <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY" />
-            <input type="hidden" name="subject" value="New AC Service Booking – AirCool Surat" />
-            <input type="hidden" name="from_name" value="AirCool Website" />
-            <input type="hidden" name="botcheck" value="" style="display:none;" />
+          <form id="contactForm" class="service-form" novalidate>
 
             <div class="form-row">
               <div class="form-group">
-                <label for="customer-name">Full Name *</label>
+                <label for="customer-name">Name *</label>
                 <input type="text" id="customer-name" name="name" placeholder="e.g. Rajesh Patel" required
                   autocomplete="name" />
               </div>
               <div class="form-group">
-                <label for="customer-phone">Phone Number *</label>
+                <label for="customer-phone">Mobile Number *</label>
                 <input type="tel" id="customer-phone" name="phone" placeholder="e.g. 9876543210" required
                   autocomplete="tel" pattern="[6-9][0-9]{9}" />
               </div>
             </div>
 
             <div class="form-group">
-              <label for="customer-email">Email Address</label>
+              <label for="customer-email">Email *</label>
               <input type="email" id="customer-email" name="email" placeholder="yourname@gmail.com"
-                autocomplete="email" />
+                autocomplete="email" required />
             </div>
 
             <div class="form-group">
               <label for="service-type">Service Type *</label>
               <select id="service-type" name="service" required>
                 <option value="" disabled selected>-- Select a Service --</option>
-                <option value="AC Repair">🔧 AC Repair</option>
-                <option value="AC Installation">🔌 AC Installation</option>
-                <option value="AC Gas Filling">❄️ AC Gas Filling</option>
-                <option value="AC Maintenance & Servicing">🛠️ AC Maintenance &amp; Servicing</option>
+                <option value="AC Repair">AC Repair</option>
+                <option value="AC Installation">AC Installation</option>
+                <option value="AC Gas Filling">AC Gas Filling</option>
+                <option value="AC Maintenance & Servicing">AC Maintenance &amp; Servicing</option>
                 <option value="Split AC Service">Split AC Service</option>
                 <option value="Window AC Service">Window AC Service</option>
-                <option value="Emergency Repair">🚨 Emergency Repair (24/7)</option>
+                <option value="Emergency Repair">Emergency Repair (24/7)</option>
                 <option value="Other">Other</option>
               </select>
-            </div>
-
-            <div class="form-group">
-              <label for="customer-address">Area / Address in Surat</label>
-              <input type="text" id="customer-address" name="address" placeholder="e.g. Adajan, Vesu, Varachha..." />
-            </div>
-
-            <div class="form-group">
-              <label for="customer-message">Additional Message</label>
-              <textarea id="customer-message" name="message"
-                placeholder="Describe your AC issue or any special requirements..."></textarea>
             </div>
 
             <button type="submit" class="form-submit" id="submitBtn">
               <i class="fas fa-paper-plane"></i> Send Message &amp; Book Service
             </button>
 
-            <div id="form-success">
-              ✅ Thank you! We received your booking request and will call you within 30 minutes.
-            </div>
+            <div id="form-success">Thank you. Your request has been sent. Please check your email for confirmation.</div>
             <div id="form-error"></div>
           </form>
         </div><!-- contact-form-wrap -->
@@ -763,7 +740,7 @@
               style="border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.6);"><i class="fab fa-whatsapp"></i></a>
             <a href="tel:8200205795" class="social-link" aria-label="Phone"
               style="border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.6);"><i class="fas fa-phone"></i></a>
-            <a href="mailto:service@gmail.com" class="social-link" aria-label="Email"
+            <a href="mailto:krishnaacservice84@gmail.com" class="social-link" aria-label="Email"
               style="border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.6);"><i class="fas fa-envelope"></i></a>
           </div>
         </div>
@@ -813,7 +790,7 @@
           </div>
           <div class="footer-contact-item">
             <i class="fas fa-envelope fi"></i>
-            <a href="mailto:service@gmail.com">service@gmail.com</a>
+            <a href="mailto:krishnaacservice84@gmail.com">krishnaacservice84@gmail.com</a>
           </div>
           <div class="footer-contact-item">
             <i class="fas fa-map-marker-alt fi"></i>
@@ -861,6 +838,64 @@
   <button id="scrollTop" aria-label="Scroll to top" title="Back to top">
     <i class="fas fa-chevron-up"></i>
   </button>
+
+  <div id="quickBookBar" class="quick-book-bar" aria-label="Quick booking bar">
+    <button type="button" id="openPopupForm" class="quick-book-btn">
+      <i class="fas fa-headset"></i> Book Service
+    </button>
+    <button type="button" id="closeQuickBookBar" class="quick-book-close" aria-label="Close quick booking bar">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+  <div id="leadPopup" class="lead-popup" aria-hidden="true">
+    <div class="lead-popup-backdrop" data-close-popup="true"></div>
+    <div class="lead-popup-card" role="dialog" aria-modal="true" aria-labelledby="popupFormTitle">
+      <button type="button" id="closePopupForm" class="lead-popup-close" aria-label="Close popup form">
+        <i class="fas fa-times"></i>
+      </button>
+      <h3 id="popupFormTitle">Get Fast AC Service</h3>
+      <p>Submit your details. We will confirm your request by email.</p>
+
+      <form id="popupServiceForm" class="service-form" novalidate>
+        <div class="form-group">
+          <label for="popup-name">Name *</label>
+          <input type="text" id="popup-name" name="name" required autocomplete="name" placeholder="Your name" />
+        </div>
+
+        <div class="form-group">
+          <label for="popup-phone">Mobile Number *</label>
+          <input type="tel" id="popup-phone" name="phone" required pattern="[6-9][0-9]{9}" autocomplete="tel"
+            placeholder="10-digit mobile number" />
+        </div>
+
+        <div class="form-group">
+          <label for="popup-email">Email *</label>
+          <input type="email" id="popup-email" name="email" required autocomplete="email"
+            placeholder="yourname@gmail.com" />
+        </div>
+
+        <div class="form-group">
+          <label for="popup-service">Service *</label>
+          <select id="popup-service" name="service" required>
+            <option value="" disabled selected>-- Select a Service --</option>
+            <option value="AC Repair">AC Repair</option>
+            <option value="AC Installation">AC Installation</option>
+            <option value="AC Gas Filling">AC Gas Filling</option>
+            <option value="AC Maintenance & Servicing">AC Maintenance &amp; Servicing</option>
+            <option value="Emergency Repair">Emergency Repair</option>
+          </select>
+        </div>
+
+        <button type="submit" class="form-submit">
+          <i class="fas fa-paper-plane"></i> Send Request
+        </button>
+
+        <div id="popup-form-success" class="popup-status success">Request submitted successfully.</div>
+        <div id="popup-form-error" class="popup-status error"></div>
+      </form>
+    </div>
+  </div>
 
   <!-- Main JS -->
   <script src="assets/js/main.js"></script>

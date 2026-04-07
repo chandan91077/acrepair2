@@ -32,6 +32,7 @@
   --shadow-md:     0 8px 32px rgba(13, 110, 253, .18);
   --shadow-lg:     0 24px 64px rgba(13, 110, 253, .22);
   --transition:    all 0.35s cubic-bezier(.4,0,.2,1);
+  --quick-bar-height: 68px;
 }
 
 /* -------------  Reset  ------------- */
@@ -828,8 +829,12 @@ button { cursor: pointer; border: none; outline: none; font-family: inherit; }
   color: var(--white);
   flex-shrink: 0;
 }
+.contact-item-content {
+  min-width: 0;
+}
 .contact-item-label { font-size: .78rem; color: var(--text-muted); }
 .contact-item-value { font-weight: 600; font-size: .97rem; color: var(--text-main); }
+.contact-item-value { word-break: break-word; }
 .contact-item-value a { color: var(--primary); }
 .contact-item-value a:hover { text-decoration: underline; }
 .social-links { display: flex; gap: .8rem; }
@@ -941,6 +946,113 @@ button { cursor: pointer; border: none; outline: none; font-family: inherit; }
   margin-top: 1rem;
 }
 
+.popup-status {
+  display: none;
+  border-radius: var(--radius-md);
+  padding: .8rem 1rem;
+  font-weight: 600;
+  text-align: center;
+  margin-top: .9rem;
+  font-size: .9rem;
+}
+.popup-status.success {
+  background: linear-gradient(135deg, #d4f5e5, #b2f0d8);
+  border: 1.5px solid var(--success);
+  color: #0a6640;
+}
+.popup-status.error {
+  background: linear-gradient(135deg, #ffe2e2, #ffc8c8);
+  border: 1.5px solid #e53935;
+  color: #b71c1c;
+}
+
+body.popup-open { overflow: hidden; }
+
+.quick-book-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: min(520px, calc(100% - 20px));
+  background: rgba(5,14,26,.96);
+  border: 1px solid rgba(255,255,255,.16);
+  border-bottom: none;
+  border-radius: 16px 16px 0 0;
+  padding: .65rem;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  z-index: 1001;
+  box-shadow: 0 -6px 24px rgba(0,0,0,.35);
+}
+.quick-book-btn {
+  flex: 1;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: var(--white);
+  border-radius: 999px;
+  font-size: .95rem;
+  font-weight: 700;
+  padding: .72rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+}
+.quick-book-close {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.16);
+  color: var(--white);
+  font-size: .95rem;
+}
+
+.lead-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: none;
+}
+.lead-popup.open { display: block; }
+.lead-popup-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+}
+.lead-popup-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(520px, calc(100% - 24px));
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 1.6rem;
+  box-shadow: var(--shadow-lg);
+}
+.lead-popup-close {
+  position: absolute;
+  top: .9rem;
+  right: .9rem;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--gray-100);
+  color: var(--text-main);
+  border: 1px solid var(--gray-200);
+}
+.lead-popup-card h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.3rem;
+  margin-bottom: .35rem;
+}
+.lead-popup-card > p {
+  color: var(--text-muted);
+  font-size: .9rem;
+  margin-bottom: 1rem;
+}
+
 /* =====================================================
    FOOTER
    ===================================================== */
@@ -1000,7 +1112,7 @@ button { cursor: pointer; border: none; outline: none; font-family: inherit; }
    ===================================================== */
 .float-btn-group {
   position: fixed;
-  bottom: 28px; right: 22px;
+  bottom: calc(var(--quick-bar-height) + 18px); right: 22px;
   display: flex;
   flex-direction: column;
   gap: .8rem;
@@ -1042,7 +1154,7 @@ button { cursor: pointer; border: none; outline: none; font-family: inherit; }
    ===================================================== */
 #scrollTop {
   position: fixed;
-  bottom: 28px; left: 22px;
+  bottom: calc(var(--quick-bar-height) + 18px); left: 22px;
   width: 46px; height: 46px;
   background: rgba(13,110,253,.85);
   border-radius: 50%;
@@ -1211,6 +1323,8 @@ button { cursor: pointer; border: none; outline: none; font-family: inherit; }
    MOBILE PORTRAIT (480px and below)
    ───────────────────────────────────────────────── */
 @media (max-width: 480px) {
+  :root { --quick-bar-height: 64px; }
+
   /* Typography */
   html { font-size: 14px; }
   .container { padding: 0 1rem; }
@@ -1389,6 +1503,12 @@ button { cursor: pointer; border: none; outline: none; font-family: inherit; }
     height: 50px;
     font-size: 1.2rem;
   }
+
+  .quick-book-bar {
+    width: calc(100% - 12px);
+    padding: .5rem;
+  }
+  .quick-book-btn { font-size: .86rem; }
 }
 
 /* ─────────────────────────────────────────────────
