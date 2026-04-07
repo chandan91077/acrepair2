@@ -16,7 +16,8 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { name, phone, email, service, source } = req.body || {};
+    const payload = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
+    const { name, phone, email, service, source } = payload;
 
     if (!name || !phone || !email || !service) {
       return json(res, 400, { success: false, message: 'Missing required form fields' });
@@ -37,11 +38,16 @@ module.exports = async (req, res) => {
       host: 'smtp.gmail.com',
       port: 465,
       secure: true,
+      connectionTimeout: 15000,
+      greetingTimeout: 15000,
+      socketTimeout: 20000,
       auth: {
         user: smtpUser,
         pass: smtpPass
       }
     });
+
+    await transporter.verify();
 
     const submittedAt = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
 
@@ -64,7 +70,7 @@ module.exports = async (req, res) => {
     `;
 
     await transporter.sendMail({
-      from: smtpUser,
+      from: `Krishna AC Service <${smtpUser}>`,
       to: ownerEmail,
       subject: `New AC Service Booking - ${name}`,
       html: ownerHtml,
@@ -72,7 +78,7 @@ module.exports = async (req, res) => {
     });
 
     await transporter.sendMail({
-      from: smtpUser,
+      from: `Krishna AC Service <${smtpUser}>`,
       to: email,
       subject: 'We received your AC service request',
       html: customerHtml
@@ -80,9 +86,11 @@ module.exports = async (req, res) => {
 
     return json(res, 200, { success: true, message: 'Mail sent successfully' });
   } catch (error) {
+    const errorCode = error && error.code ? error.code : 'MAIL_SEND_FAILED';
+    const errorMessage = error && error.message ? error.message : 'Mail send failed';
     return json(res, 500, {
       success: false,
-      message: error && error.message ? error.message : 'Mail send failed'
+      message: `${errorCode}: ${errorMessage}`
     });
   }
 };

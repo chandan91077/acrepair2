@@ -128,15 +128,9 @@ const isLocalHost = ['localhost', '127.0.0.1'].includes(window.location.hostname
 const CONTACT_API_ENDPOINTS = isLocalHost
   ? [
       'http://localhost:3000/api/send-mail',
-      '/api/send-mail',
-      '/ac-repair-service/api/send-mail'
+      '/api/send-mail'
     ]
-  : [
-      '/api/send-mail',
-      'api/send-mail',
-      './api/send-mail',
-      '/ac-repair-service/api/send-mail'
-    ];
+  : ['/api/send-mail'];
 
 function getStatusNodes(form) {
   const isPopup = form.id === 'popupServiceForm';
